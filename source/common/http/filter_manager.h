@@ -250,6 +250,12 @@ struct ActiveStreamDecoderFilter : public ActiveStreamFilterBase,
     return status;
   }
 
+  void setDownStreamConnectionAddress(const std::string& pLocalAddress,
+                                      const std::string& pRemoteAddress) {
+    handle_->setDownStreamConnectionAddress(pLocalAddress, pRemoteAddress);
+    return;
+  }
+
   void requestDataTooLarge();
   void requestDataDrained();
 

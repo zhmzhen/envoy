@@ -36,6 +36,13 @@ HttpPerRequestTapperPtr HttpTapConfigImpl::createPerRequestTapper(uint64_t strea
   return std::make_unique<HttpPerRequestTapperImpl>(shared_from_this(), stream_id);
 }
 
+void HttpPerRequestTapperImpl::setDownStreamConnectionAddress(const std::string& pLocalAddress,
+                                                              const std::string& pRemoteAddress) {
+  downstream_local_address = pLocalAddress;
+  downstream_remote_address = pRemoteAddress;
+  return;
+}
+
 void HttpPerRequestTapperImpl::streamRequestHeaders() {
   TapCommon::TraceWrapperPtr trace = makeTraceSegment();
   request_headers_->iterate(fillHeaderList(
@@ -157,12 +164,36 @@ bool HttpPerRequestTapperImpl::onDestroyLog() {
   makeBufferedFullTraceIfNeeded();
   auto& http_trace = *buffered_full_trace_->mutable_http_buffered_trace();
   if (request_headers_ != nullptr) {
+    if (config_->downstream_connection_address()) {
+      std::string l_ds_address;
+      getDownstreamLocalAddress(l_ds_address);
+      if (!l_ds_address.empty()) {
+        http_trace.mutable_request()->set_downstream_local_address(l_ds_address);
+      }
+      l_ds_address.clear();
+      getDownstreamRemoteAddress(l_ds_address);
+      if (!l_ds_address.empty()) {
+        http_trace.mutable_request()->set_downstream_remote_address(l_ds_address);
+      }
+    }
     request_headers_->iterate(fillHeaderList(http_trace.mutable_request()->mutable_headers()));
   }
   if (request_trailers_ != nullptr) {
     request_trailers_->iterate(fillHeaderList(http_trace.mutable_request()->mutable_trailers()));
   }
   if (response_headers_ != nullptr) {
+    if (config_->downstream_connection_address()) {
+      std::string l_ds_address;
+      getDownstreamLocalAddress(l_ds_address);
+      if (!l_ds_address.empty()) {
+        http_trace.mutable_request()->set_downstream_local_address(l_ds_address);
+      }
+      l_ds_address.clear();
+      getDownstreamRemoteAddress(l_ds_address);
+      if (!l_ds_address.empty()) {
+        http_trace.mutable_request()->set_downstream_remote_address(l_ds_address);
+      }
+    }
     response_headers_->iterate(fillHeaderList(http_trace.mutable_response()->mutable_headers()));
   }
   if (response_trailers_ != nullptr) {

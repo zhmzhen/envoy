@@ -38,6 +38,8 @@ public:
   void onRequestHeaders(const Http::RequestHeaderMap& headers) override;
   void onRequestBody(const Buffer::Instance& data) override;
   void onRequestTrailers(const Http::RequestTrailerMap& headers) override;
+  void setDownStreamConnectionAddress(const std::string& pLocalAddress,
+                                      const std::string& pRemoteAddress) override;
   void onResponseHeaders(const Http::ResponseHeaderMap& headers) override;
   void onResponseBody(const Buffer::Instance& data) override;
   void onResponseTrailers(const Http::ResponseTrailerMap& headers) override;
@@ -72,11 +74,16 @@ private:
   void streamResponseHeaders();
   void streamBufferedResponseBody();
 
+  void getDownstreamLocalAddress(std::string& pDSLA) { pDSLA = downstream_local_address; }
+  void getDownstreamRemoteAddress(std::string& pDSRA) { pDSRA = downstream_remote_address; }
+
   HttpTapConfigSharedPtr config_;
   const uint64_t stream_id_;
   Extensions::Common::Tap::PerTapSinkHandleManagerPtr sink_handle_;
   Extensions::Common::Tap::Matcher::MatchStatusVector statuses_;
   bool started_streaming_trace_{};
+  std::string downstream_local_address;
+  std::string downstream_remote_address;
   const Http::RequestHeaderMap* request_headers_{};
   const Http::HeaderMap* request_trailers_{};
   const Http::ResponseHeaderMap* response_headers_{};

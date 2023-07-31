@@ -153,6 +153,7 @@ message HttpGenericBodyMatch {
 }
 
 // Tap output configuration.
+// [#next-free-field: 7]
 message OutputConfig {
   option (udpa.annotations.versioning).previous_message_type =
       "envoy.service.tap.v2alpha.OutputConfig";
@@ -180,6 +181,10 @@ message OutputConfig {
   // match can be determined. See the HTTP tap filter :ref:`streaming
   // <config_http_filters_tap_streaming>` documentation for more information.
   bool streaming = 4;
+
+  bool req_resp_caught_time = 5;
+
+  bool downstream_connection_address = 6;
 }
 
 // Tap output sink configuration.

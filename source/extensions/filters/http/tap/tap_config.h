@@ -30,6 +30,12 @@ public:
   virtual void onRequestBody(const Buffer::Instance& data) PURE;
 
   /**
+   * Called when decode request header.
+   */
+  virtual void setDownStreamConnectionAddress(const std::string& pLocalAddress,
+                                              const std::string& pRemoteAddress) PURE;
+
+  /**
    * Called when request trailers are received.
    */
   virtual void onRequestTrailers(const Http::RequestTrailerMap& trailers) PURE;

@@ -5,6 +5,8 @@ package envoy.data.tap.v3;
 import "envoy/config/core/v3/base.proto";
 import "envoy/data/tap/v3/common.proto";
 
+import "google/protobuf/timestamp.proto";
+
 import "udpa/annotations/status.proto";
 import "udpa/annotations/versioning.proto";
 
@@ -22,6 +24,7 @@ message HttpBufferedTrace {
       "envoy.data.tap.v2alpha.HttpBufferedTrace";
 
   // HTTP message wrapper.
+  // [#next-free-field: 7]
   message Message {
     option (udpa.annotations.versioning).previous_message_type =
         "envoy.data.tap.v2alpha.HttpBufferedTrace.Message";
@@ -34,6 +37,15 @@ message HttpBufferedTrace {
 
     // Message trailers.
     repeated config.core.v3.HeaderValue trailers = 3;
+
+    // caught time
+    google.protobuf.Timestamp caught_time = 4;
+
+    // downstream connection remote address
+    string downstream_remote_address = 5;
+
+    // downstream connection local address
+    string downstream_local_address = 6;
   }
 
   // Request message.

@@ -881,6 +881,8 @@ public:
    * Called at the end of the stream, when all data has been decoded.
    */
   virtual void decodeComplete() {}
+  virtual void setDownStreamConnectionAddress([[maybe_unused]] const std::string& pLocalAddress,
+                                              [[maybe_unused]] const std::string& pRemoteAddress) {}
 };
 
 using StreamDecoderFilterSharedPtr = std::shared_ptr<StreamDecoderFilter>;
