@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package envoy.data.tap.v3;
 
+import "envoy/config/core/v3/address.proto";
 import "envoy/config/core/v3/base.proto";
 import "envoy/data/tap/v3/common.proto";
 
@@ -41,11 +42,11 @@ message HttpBufferedTrace {
     // caught time
     google.protobuf.Timestamp caught_time = 4;
 
-    // downstream connection remote address
-    string downstream_remote_address = 5;
+    // downstream connection address
+    config.core.v3.Address downstream_remote_address = 5;
 
     // downstream connection local address
-    string downstream_local_address = 6;
+    config.core.v3.Address downstream_local_address = 6;
   }
 
   // Request message.
